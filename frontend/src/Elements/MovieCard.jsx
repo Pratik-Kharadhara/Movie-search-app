@@ -9,7 +9,11 @@ export default function MovieCard({movie}){
                     <img src={movie.src} alt={movie.title} />
             </div>
             <div className="movie-overlay">
+                <h2>{movie.title}</h2>
                 <button className="fav-btn" onClick={MovieLike}>🤍</button>
+            </div>
+            <div className="movie-info">
+              <p>  {movie.release_date} </p>
             </div>
         </div>
     )
