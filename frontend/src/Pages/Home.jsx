@@ -1,6 +1,6 @@
 import { useState } from "react"
 import MovieCard from "../Elements/MovieCard"
-
+import "../css/Home.css"
 
 export default function Home(){
     const [searchQuery,setSearchquery] = useState("");
@@ -12,7 +12,7 @@ export default function Home(){
     ]
     const handleSearch=(e)=>{
         e.preventDefault();
-            console.log(searchQuery);
+            ;
     }
     
     return (
@@ -30,7 +30,7 @@ export default function Home(){
             </form>
             <div className="movie-grid">
                 { movies.map((m)=>(
-                      <MovieCard movie={m} key={m.id} /> 
+                    m.title.toLowerCase().startsWith(searchQuery) && <MovieCard movie={m} key={m.id} /> 
                 ))}
             </div>
         </div>
