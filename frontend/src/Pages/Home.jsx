@@ -12,11 +12,12 @@ export default function Home(){
    // or any error came)
 
    useEffect(()=>{
-        const getpopularMovies= async ()=>{
+      getpopularMovies();
+   },[])
+    async function  getpopularMovies(){
            try{
             const loadPopularMovie= await popularMovies();
             setMovies(loadPopularMovie);
-            console.log(loadPopularMovie)
            }
            catch(e){
             setError('falied to load movies');
@@ -26,12 +27,24 @@ export default function Home(){
                 setLoader(false);
            }
         }
-        getpopularMovies();
-   },[])
     
-    const handleSearch=(e)=>{
+    const handleSearch=async (e)=>{
+      if(!searchQuery.trim()) return 
+      if(loader) return 
         e.preventDefault();
-            
+        setLoader(true);
+        
+        try{
+            const getSearchedMovie = await searchMovies(searchQuery);
+                setMovies(getSearchedMovie); //setting the movie what ever the search is 
+                setError(null)
+            }
+        catch(e){
+            setError('gets a error');
+        }
+        finally{
+            setLoader(false);
+        }
     }
     
     return (
@@ -48,9 +61,22 @@ export default function Home(){
                 <button className="search-btn">🔍</button>
             </form>
             <div className="movie-grid">
-                { movies.map((m)=>(
+
+                {error && <div className='error'>
+                   Error oucrd {error}
+                   </div>  
+                    }
+                
+                
+                {/* if loader is still loading display loading other wise 
+                    display the movie card */}
+                {loader ? <div className="loader">
+                        loading ...
+                </div> :
+                 movies.map((m)=>(
                     m.title.toLowerCase().startsWith(searchQuery) && <MovieCard movie={m} key={m.id} />
                 ))}
+
             </div>
         </div>
     )

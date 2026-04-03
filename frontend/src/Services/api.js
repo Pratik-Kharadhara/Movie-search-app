@@ -6,7 +6,7 @@ export const popularMovies = async()=>{
    try{
      const Response = await fetch(`${base_url}/movie/popular?api_key=${api_key}`);
     const data = await Response.json();//gives us the json format 
-    console.log('i am sending the data')
+   // console.log('i am sending the data')
     return data.results;
    }
    catch(e){
@@ -16,8 +16,14 @@ export const popularMovies = async()=>{
 
 
 export const searchMovies = async(query)=>{
-    //getting the data from fetch
-    const Response = await fetch(`${base_url}/search/movies/?api_key=${api_key}&query=${encodeURIComponent(query)}`);
+    try{
+        //getting the data from fetch
+    const Response = await fetch(`${base_url}/search/movie?api_key=${api_key}&query=${encodeURIComponent(query)}`);
     const data = await Response.json();//gives us the json format 
     return data.results;
+    }
+    catch(e){
+            console.log(e);
+            alert('error occurd');
+    }
 }
