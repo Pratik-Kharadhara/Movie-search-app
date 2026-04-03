@@ -1,18 +1,37 @@
-import { useState } from "react"
+import { useState ,useEffect } from "react"
 import MovieCard from "../Elements/MovieCard"
 import "../css/Home.css"
+import { popularMovies ,searchMovies } from "../Services/api";
 
 export default function Home(){
     const [searchQuery,setSearchquery] = useState("");
-    const movies= [
-        { id: 1,title:"Charlie's Angels: Full Throttle",src:"https://randommer.io/images/movies/9471.webp",release_date:"2003"},
-        {id: 2,title:"12 Rounds 2: Reloaded",src:"https://m.media-amazon.com/images/I/71z02SevNnL._AC_UY327_FMwebp_QL65_.jpg",release_date:"2013"},      
-         {id: 3,title:"When a Stranger Calls",src:"https://m.media-amazon.com/images/I/81d4DagmhgL._AC_UY327_FMwebp_QL65_.jpg",release_date:"2006"},
-        { id: 4 ,title:"Hatchet",src:"https://m.media-amazon.com/images/I/71d3ISAnPQL._AC_UY327_FMwebp_QL65_.jpg",release_date:"2006"}
-    ]
+   const [movies,setMovies]=useState([]); //for getting movies from the api and setting them
+   const [error,setError]=useState(null);
+   const [loader,setLoader]=useState(true); //setting the loader -> true means
+   //still i am loading the task , and we gonna set it false after it dones the loading (doesn't care if its a succes 
+   // or any error came)
+
+   useEffect(()=>{
+        const getpopularMovies= async ()=>{
+           try{
+            const loadPopularMovie= await popularMovies();
+            setMovies(loadPopularMovie);
+            console.log(loadPopularMovie)
+           }
+           catch(e){
+            setError('falied to load movies');
+            console.log(e);
+           }
+           finally{
+                setLoader(false);
+           }
+        }
+        getpopularMovies();
+   },[])
+    
     const handleSearch=(e)=>{
         e.preventDefault();
-            ;
+            
     }
     
     return (
@@ -30,7 +49,7 @@ export default function Home(){
             </form>
             <div className="movie-grid">
                 { movies.map((m)=>(
-                    m.title.toLowerCase().startsWith(searchQuery) && <MovieCard movie={m} key={m.id} /> 
+                    m.title.toLowerCase().startsWith(searchQuery) && <MovieCard movie={m} key={m.id} />
                 ))}
             </div>
         </div>
