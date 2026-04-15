@@ -1,7 +1,7 @@
 import "../css/MovieCard.css"
 export default function MovieCard({movie}){
     function MovieLike(){
-        alert ("clicked");
+        
     }
 
     return (
